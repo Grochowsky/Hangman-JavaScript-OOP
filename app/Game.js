@@ -1,73 +1,72 @@
-import { Quote } from './Quote.js'
+import { Quote } from "./Quote.js";
 
 class Game {
-
   currentStep = 0;
   lastStep = 7;
 
-  quotes = [{
-    text: 'pan tadeusz',
-    category: 'Utwór Literacki'
-  }]
-  constructor({
-    lettersWrapper,
-    categoryWrapper,
-    wordWrapper,
-    outputWrapper,
-  }) {
-    this.lettersWrapper = lettersWrapper
-    this.categoryWrapper = categoryWrapper
-    this.wordWrapper = wordWrapper
-    this.outputWrapper = outputWrapper
+  quotes = [
+    {
+      text: "pan tadeusz",
+      category: "Utwór Literacki",
+    },
+  ];
+  constructor({ lettersWrapper, categoryWrapper, wordWrapper, outputWrapper }) {
+    this.lettersWrapper = lettersWrapper;
+    this.categoryWrapper = categoryWrapper;
+    this.wordWrapper = wordWrapper;
+    this.outputWrapper = outputWrapper;
 
-    const {text, category} = this.quotes[Math.floor(Math.random() * this.quotes.length)]
+    const { text, category } = this.quotes[
+      Math.floor(Math.random() * this.quotes.length)
+    ];
     this.categoryWrapper.innerHTML = category;
     this.quote = new Quote(text);
-    
   }
-  guess(letter, event){
+  guess(letter, event) {
     event.target.disabled = true;
-    if(this.quote.guess(letter)){
-      this.drawQuote()
+    if (this.quote.guess(letter)) {
+      this.drawQuote();
     } else {
       this.currentStep++;
-      document.getElementsByClassName('step')[this.currentStep].style.opacity = 1;
-      if(this.currentStep == this.lastStep ){
+      document.getElementsByClassName("step")[
+        this.currentStep
+      ].style.opacity = 1;
+      if (this.currentStep == this.lastStep) {
         this.loosing();
       }
     }
   }
-  drawLetters(){
-    for(let i = 0; i<26; i++){
-      const label = (i+10).toString(36);
-      const button = document.createElement('button');
+  drawLetters() {
+    for (let i = 0; i < 26; i++) {
+      const label = (i + 10).toString(36);
+      const button = document.createElement("button");
       button.innerHTML = label;
-      button.addEventListener('click', (event) => {
-        this.guess(label,event)
-      })
+      button.addEventListener("click", (event) => {
+        this.guess(label, event);
+      });
       this.lettersWrapper.appendChild(button);
     }
   }
 
-  drawQuote(){
+  drawQuote() {
     const content = this.quote.getContent();
     this.wordWrapper.innerHTML = content;
-    if (!content.includes('_')){
-      this.winning()
+    if (!content.includes("_")) {
+      this.winning();
     }
   }
   start() {
-    document.getElementsByClassName('step')[this.currentStep].style.opacity = 1;
+    document.getElementsByClassName("step")[this.currentStep].style.opacity = 1;
     this.drawLetters();
     this.drawQuote();
   }
-  winning(){
-    this.wordWrapper.innerHTML = 'GRATULACJE! WYGRAŁEŚ! KONIEC GRY';
-    this.lettersWrapper.innerHTML = ' ';
+  winning() {
+    this.wordWrapper.innerHTML = "GRATULACJE! WYGRAŁEŚ! KONIEC GRY";
+    this.lettersWrapper.innerHTML = " ";
   }
-  loosing(){
-    this.wordWrapper.innerHTML = 'NIESTETY PRZEGRAŁEŚ! SPRÓBUJ JESZCZE RAZ!';
-    this.lettersWrapper.innerHTML = ' ';
+  loosing() {
+    this.wordWrapper.innerHTML = "NIESTETY PRZEGRAŁEŚ! SPRÓBUJ JESZCZE RAZ!";
+    this.lettersWrapper.innerHTML = " ";
   }
 }
 
